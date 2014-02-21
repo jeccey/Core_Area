@@ -118,10 +118,8 @@ result ReportAlarmRes(struct ReportAlarmRes req_args)
 /************   结束--响应   *******************************/
 int main()
 {
-    Core_node *cc = new Core_node("127.0.0.1", 1234);
-
     {
-        /****   注册回调函数... ...响应区域 MU的请求，生成响应 xml的参数  ****/
+        /****   注册回调函数...响应区域 MU的请求，生成响应 xml的参数  ****/
         pcb_FunMap.MURgister = &MURegister;
         pcb_FunMap.ResReport = &ResReport;
         pcb_FunMap.ResChange = &ResChange;
@@ -134,9 +132,10 @@ int main()
         pcb_FunMap.ReportAlarmRes = &ReportAlarmRes;
     }
 
+    Core_node *cc = new Core_node("127.0.0.1", 1234);
     //创建server
     ThreadedExecutor executor;
-    executor.execute(cc);
+    executor.execute(cc);   //线程中运行
 
     //核心 MU 主动向  区域 MU 发送时（比如 历史视频查询 QueryHistoryFiles），需要构造 sip头部
     (*cc).create_request_header("sip:127.0.0.1", "server_alice", "server_bob", "server_tom", "0001");
@@ -154,8 +153,7 @@ int main()
     int tt;
     while(cin>>tt) {
         (*cc).INFO(command, &req_args, "127.0.0.1");
-
-  //              (*cc).HisInfo(command1, &req_args, "127.0.0.1");
+   //     (*cc).HisInfo(command1, &req_args, "127.0.0.1");
   //                      (*cc).HisLoadInfo(command2, &req_args, "127.0.0.1");
 
     }

@@ -3,7 +3,7 @@
 
 using namespace std;
 
-//构造返回值的 回调函数实现
+/***************   构造返回值的 回调函数实现   *****************/
 //响应历史视频查询
 respHistoryFile QueryHistoryFiles(struct reqHistoryFile req_hf)
 {
@@ -182,7 +182,6 @@ result_QueryAlarmRes QueryAlarmRes(struct QueryAlarmRes req_args)
 
 }
 
-
 //C.2.26 响应 告警信息查询
 result_ReportAlarmInfo ReportAlarmInfo(struct ReportAlarmInfo req_args)
 {
@@ -223,6 +222,7 @@ result ControlPTZ(struct ControlPTZ req_args)
 
     return result_arg;
 }
+
 ////C.2.28  响应 跨节点资源下发
 result ResTransOrder(struct ResTransOrder req_args)
 {
@@ -247,7 +247,6 @@ result ResChangeOrder(struct ResChangeOrder req_args)
     return result_arg;
 }
 
-
 //C.2.8 响应 实时流媒体传输 核心DDU->区域DDu
 result INFO(struct INFO req_args)
 {
@@ -259,6 +258,7 @@ result INFO(struct INFO req_args)
 
     return result_arg;
 }
+
 //C.2.11 响应 历史视频流媒体传输 核心DDU->区域DDu
 result HisInfo(struct INFO req_args)
 {
@@ -270,6 +270,7 @@ result HisInfo(struct INFO req_args)
 
     return result_arg;
 }
+
 //C.2.14 响应 历史视频下载流媒体传输 核心DDU->区域DDu
 result HisLoadInfo(struct INFO req_args)
 {
@@ -282,15 +283,11 @@ result HisLoadInfo(struct INFO req_args)
     return result_arg;
 }
 
-
-
-/******   结束 返回值回调函数   *********/
+/***************   结束 返回值回调函数   *****************/
 
 int main(int argc, char **argv)
 {
-    Area_node *ac = new Area_node("127.0.0.1", 1234);
-    {
-        //注册回调函数，响应核心 MU的请求，返回响应 xml_body 参数----------------------------------------------------------------------------------------
+    { //注册回调函数，响应核心 MU的请求，返回响应 xml_body 参数
         pcb_FunMap.QueryHistoryFiles = &QueryHistoryFiles;
         pcb_FunMap.StartMediaReq = &StartMediaReq;
         pcb_FunMap.StopMediaReq = &StopMediaReq;
@@ -309,16 +306,16 @@ int main(int argc, char **argv)
         pcb_FunMap.INFO = &INFO;
         pcb_FunMap.HisInfo = &HisInfo;
         pcb_FunMap.HisLoadInfo = &HisLoadInfo;
-
     }
+
+    Area_node *ac = new Area_node("127.0.0.1", 1234);
     //连接服务器
     ThreadedExecutor executor;
     executor.execute(ac);
     //填充 sip 头部, 供发送到 核心 MU时使用
     (*ac).create_request_header("sip:127.0.0.1", "alice", "bob", "tom", "0001");
 
-    /*******************************下面是测试 ******************************/
-#if 1
+/********************** 下面是测试  ******************************************/
     //调用对应的函数
     const char *command = "ReportAlarmRes";
     struct ReportAlarmRes req_args = {
@@ -334,7 +331,6 @@ int main(int argc, char **argv)
     {
         (*ac).ReportAlarmRes(command, &req_args);
     }
-#endif
 
     return 0;
 }

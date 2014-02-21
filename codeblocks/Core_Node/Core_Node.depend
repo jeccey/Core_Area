@@ -144,3 +144,72 @@
 
 1389753108 /home/jeccey/project/workspace/Core_Node/include/test.h
 
+1392958648 source:/home/jeccey/project/Core_Area/codeblocks/Core_Node/src/Core_node.cpp
+	"../include/Core_node.h"
+
+1392958648 /home/jeccey/project/Core_Area/codeblocks/Core_Node/include/Core_node.h
+	"My_connec.h"
+	"Message_handler.h"
+	<zthread/Runnable.h>
+	<zthread/Thread.h>
+	<zthread/ThreadedExecutor.h>
+
+1392958648 /home/jeccey/project/Core_Area/codeblocks/Core_Node/include/My_connec.h
+	"Server.h"
+	"Connection.h"
+	"Message_handler.h"
+	"XML_Parse.h"
+
+1392958648 /home/jeccey/project/Core_Area/codeblocks/Core_Node/include/Server.h
+	<sys/socket.h>
+	<netinet/in.h>
+	<arpa/inet.h>
+	<event2/bufferevent.h>
+	<event2/buffer.h>
+	<event2/listener.h>
+	<event2/util.h>
+	<event2/event.h>
+	<string.h>
+	<signal.h>
+	<errno.h>
+	<iostream>
+	<map>
+
+1392958648 /home/jeccey/project/Core_Area/codeblocks/Core_Node/include/Connection.h
+	<event2/event.h>
+	<event2/buffer.h>
+	<event2/bufferevent.h>
+	<string>
+
+1392958648 /home/jeccey/project/Core_Area/codeblocks/Core_Node/include/Message_handler.h
+	<string>
+	<libxml/parser.h>
+	<libxml/tree.h>
+	<string.h>
+	"Parameters.h"
+
+1392958648 /home/jeccey/project/Core_Area/codeblocks/Core_Node/include/Parameters.h
+
+1392958648 /home/jeccey/project/Core_Area/codeblocks/Core_Node/include/XML_Parse.h
+	<string>
+	<iostream>
+	<map>
+	<libxml/parser.h>
+	<libxml/tree.h>
+	"Parameters.h"
+	"Core_callback.h"
+
+1392958648 /home/jeccey/project/Core_Area/codeblocks/Core_Node/include/Core_callback.h
+	"Parameters.h"
+
+1392958648 source:/home/jeccey/project/Core_Area/codeblocks/Core_Node/src/Message_handler.cpp
+	"../include/Message_handler.h"
+	<iostream>
+	<sstream>
+
+1392958648 source:/home/jeccey/project/Core_Area/codeblocks/Core_Node/src/My_connec.cpp
+	"../include/My_connec.h"
+
+1392965365 source:/home/jeccey/project/Core_Area/codeblocks/Core_Node/main.cpp
+	"include/Core_node.h"
+

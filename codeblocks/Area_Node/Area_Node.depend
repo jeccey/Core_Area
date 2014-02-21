@@ -205,3 +205,64 @@
 1392888887 source:/home/jeccey/project/codeblocks/Area_Node/src/TCP_Client.cpp
 	"../include/TCP_Client.h"
 
+1392958648 source:/home/jeccey/project/Core_Area/codeblocks/Area_Node/main.cpp
+	"include/Area_node.h"
+	"include/Parameters.h"
+
+1392958648 /home/jeccey/project/Core_Area/codeblocks/Area_Node/include/Area_node.h
+	"Message_handler.h"
+	"Parameters.h"
+	"Area_callback.h"
+	"XML_Parse.h"
+	"Client.h"
+	"TCP_Client.h"
+	<zthread/Runnable.h>
+	<zthread/Thread.h>
+	<zthread/ThreadedExecutor.h>
+	<string>
+	<iostream>
+
+1392958648 /home/jeccey/project/Core_Area/codeblocks/Area_Node/include/Message_handler.h
+	<string>
+	<libxml/parser.h>
+	<libxml/tree.h>
+	<string.h>
+	"Parameters.h"
+
+1392958648 /home/jeccey/project/Core_Area/codeblocks/Area_Node/include/Parameters.h
+
+1392958648 /home/jeccey/project/Core_Area/codeblocks/Area_Node/include/Area_callback.h
+	"Parameters.h"
+
+1392958648 /home/jeccey/project/Core_Area/codeblocks/Area_Node/include/XML_Parse.h
+	<string>
+	<string.h>
+	<iostream>
+	<map>
+	<libxml/parser.h>
+	<libxml/tree.h>
+	"Parameters.h"
+	"Area_callback.h"
+
+1392958648 /home/jeccey/project/Core_Area/codeblocks/Area_Node/include/TCP_Client.h
+	<iostream>
+	<stdio.h>
+	<string.h>
+	<string>
+	<sys/socket.h>
+	<arpa/inet.h>
+	<netdb.h>
+	"Message_handler.h"
+	"XML_Parse.h"
+
+1392958648 source:/home/jeccey/project/Core_Area/codeblocks/Area_Node/src/Area_node.cpp
+	"../include/Area_node.h"
+
+1392965242 source:/home/jeccey/project/Core_Area/codeblocks/Area_Node/src/Message_handler.cpp
+	"../include/Message_handler.h"
+	<iostream>
+	<sstream>
+
+1392958648 source:/home/jeccey/project/Core_Area/codeblocks/Area_Node/src/TCP_Client.cpp
+	"../include/TCP_Client.h"
+

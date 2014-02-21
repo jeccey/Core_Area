@@ -16,7 +16,6 @@ Core_node::~Core_node()
 
 void Core_node::run()
 {
-
     server.setup(ip, port);
     server.start();
     server.update();
