@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Area_Node" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/Area_Node" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-I/usr/include/libxml2" />
+				</Compiler>
+				<Linker>
+					<Add option="-lxml2" />
+					<Add option="-levent" />
+					<Add option="-lZThread" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/Area_Node" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-I/usr/include/libxml2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add option="-lxml2" />
+					<Add option="-lZThread" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="include/Area_callback.h" />
+		<Unit filename="include/Area_node.h" />
+		<Unit filename="include/Client.h" />
+		<Unit filename="include/Message_handler.h" />
+		<Unit filename="include/My_connec.h" />
+		<Unit filename="include/Parameters.h" />
+		<Unit filename="include/TCP_Client.h" />
+		<Unit filename="include/XML_Parse.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="src/Area_node.cpp" />
+		<Unit filename="src/Message_handler.cpp" />
+		<Unit filename="src/TCP_Client.cpp" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

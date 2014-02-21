@@ -1,0 +1,110 @@
+//2014-01-10
+#if 0
+xmlDocPtr create_XML_request(const char *command)
+{
+    xmlDocPtr doc = NULL;           	/* document pointer */
+    xmlNodePtr root_node = NULL;     /* node pointer*/
+
+    //1. Creates a new document, a node and set it as a root node
+    doc = xmlNewDoc(BAD_CAST "1.0");
+    doc->encoding = BAD_CAST strdup("GB2312");
+    doc->standalone = 1;	//standalone = yes
+
+    root_node = xmlNewNode(NULL, BAD_CAST "request");// request or response
+    xmlDocSetRootElement(doc, root_node);   /* set document's root node */
+
+    xmlNewProp(root_node, BAD_CAST "command", BAD_CAST command);
+    xmlNewChild (root_node, NULL, BAD_CAST "parameters", NULL);
+    return doc;
+}
+
+string MURegister(const char *command, const char *muId, const char *muIp, const char *muPort, const char *muName, const char *muPassword
+                  , const char *manufacturerId, const char *manufacturerName, const char *productVersion, const char *softwareVersion)
+{
+    string sx_msg("siphead\r\n\r\n");
+
+    xmlDocPtr doc = NULL;            /* document pointer */
+    xmlNodePtr root_node = NULL;
+    xmlChar *xmlbuff;
+    int buffersize;
+
+    doc = create_XML_request(command);
+    root_node =  xmlDocGetRootElement(doc);
+    root_node = root_node->children;
+    //创建新的子节点
+    xmlNewChild (root_node, NULL, BAD_CAST "muId", BAD_CAST muId);
+    xmlNewChild (root_node, NULL, BAD_CAST "muIp", BAD_CAST muIp);
+    xmlNewChild (root_node, NULL, BAD_CAST "muPort", BAD_CAST muPort);
+    xmlNewChild (root_node, NULL, BAD_CAST "muName", BAD_CAST muName);
+    xmlNewChild (root_node, NULL, BAD_CAST "muPassword", BAD_CAST muPassword);
+    xmlNewChild (root_node, NULL, BAD_CAST "manufacturerId", BAD_CAST manufacturerId);
+    xmlNewChild (root_node, NULL, BAD_CAST "manufacturerName", BAD_CAST manufacturerName);
+    xmlNewChild (root_node, NULL, BAD_CAST "productVersion", BAD_CAST productVersion);
+    xmlNewChild (root_node, NULL, BAD_CAST "softwareVersion", BAD_CAST softwareVersion);
+
+
+    /* Dump the document to a buffer */
+    xmlDocDumpFormatMemory(doc, &xmlbuff, &buffersize, 1);
+
+
+    xmlFreeDoc(doc);
+    xmlCleanupParser();     //清理
+    xmlMemoryDump();        //debug memory for regression tests
+
+    sx_msg += (char *)xmlbuff;
+
+    return sx_msg;
+}
+#endif
+
+#if 0
+int Message_handler::msg_to_str(char **dest, struct sip_message *sipmsg)
+{
+    unsigned int size = 0;
+
+    if (dest == NULL || sipmsg == NULL)
+        return -1;
+
+    size = sipmsg->len;
+    *dest = (char *)malloc(size);
+    if (*dest == NULL)
+        return -2;
+    memset(*dest, 0, size);
+    if(sipmsg->first_line->type == 0) //Request
+    {
+        sprintf_s(*dest, size,
+                  "%s sip:%s SIP/2.0\r\n"
+                  "Via: SIP/2.0/TCP %s\r\n"
+                  "To: %s\r\n"
+                  "From: %s\r\n"
+                  "Max-Forwards: 70\r\n"
+                  "Call-ID: %s\r\n"
+                  "CSeq: %d %s\r\n"
+                  "Content-Type: RVSS/xml\r\n"
+                  "Content-Length: %d\r\n\r\n%s"
+                  ,sipmsg->first_line->method, sipmsg->first_line->uri
+                  ,sipmsg->via, sipmsg->to, sipmsg->from, sipmsg->call_info, sipmsg->cseq, sipmsg->first_line->method
+                  ,sipmsg->content_length, sipmsg->xml_body;
+    }
+    else   //Response
+    {
+        sprintf_s(*dest, size,
+                  "SIP/2.0 %s %s\r\n"
+                  "Via: SIP/2.0/TCP %s\r\n"
+                  "To: %s\r\n"
+                  "From: %s\r\n"
+                  "Call-ID: %s\r\n"
+                  "CSeq: %d %s\r\n"
+                  "Content-Type: RVSS/xml\r\n"
+                  "Content-Length: %d\r\n\r\n%s"
+                  ,sipmsg->first_line->status, sipmsg->first_line->reason
+                  ,sipmsg->via, sipmsg->to, sipmsg->from, sipmsg->call_info, sipmsg->cseq, sipmsg->first_line->method
+                  ,sipmsg->content_length, sipmsg->xml_body;
+    }
+    return 0;
+}
+#endif
+
+//2014-01-10
+改下面的函数
+void Message_handler::msg_to_str(string &dest, struct sip_message *sipmsg)
