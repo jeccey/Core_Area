@@ -395,13 +395,26 @@ MethodCall ReportCamResState() {
 	Struct URL;
 	Array group;
 
-	URL.addMember("resId",Value("resId",RpcString("resId_1")));
+	URL.addMember("resId",Value("resId",RpcString("resId_1233333333333333")));
 	URL.addMember("state",Value("state",RpcString("state_1")));
 	group.addItem(Value("URL",URL));
 	testcall.addParam(Value("group",group));
 
 	return testcall;
 }
+/********************************************************************************
+ *      AreaNode ---> CoreNode
+ *******************************************************************************/
+MethodCall MUKeepAlive() {
+	MethodCall testcall("MURegister");
+
+	Value param1("MUKeepAlivePeriod",RpcString("100"));
+
+	testcall.addParam(param1);
+
+	return testcall;
+}
+
 
 int main(){
 	string user = "110@192.168.80.125";
@@ -417,11 +430,16 @@ int main(){
 		Protocol *protocol = &prot;
 		prot.setPersistent(true);
 		ulxr::Requester client(&prot);
-
-		/*prot.buildRequestHeader(user,from,to,via,cseq,call_id);
+		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
 		cout << client.call(CuRegister(),"").getXml() << endl;
+/*
+		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
+		cout << client.call(MUKeepAlive(),"").getXml() << endl;
 
 		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
+		cout << client.call(CuRegister(),"").getXml() << endl;
+
+        prot.buildRequestHeader(user,from,to,via,cseq,call_id);
 		cout << client.call(CuKeepAlive(),"").getXml() << endl;
 
 		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
@@ -473,13 +491,11 @@ int main(){
 		cout << client.call(PlayClose(),"").getXml() << endl;
 
 		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
-		cout << client.call(PlayCtrl(),"").getXml() << endl;*/
+		cout << client.call(PlayCtrl(),"").getXml() << endl;
 
 		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
-		//client.call(ReportCamResState(),"");
-		cout << client.call(ReportCamResState(),"").getXml() << endl;
+		cout << client.call(CuRegister(),"").getXml() << endl;*/
 
-		//ReportCamResState
 	} catch ( ConnectionException &e) {
 		cout << e.what() << endl;
 	}

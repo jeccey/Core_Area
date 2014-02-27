@@ -1,0 +1,1 @@
+./CoreRequester.o: CoreRequester.cpp

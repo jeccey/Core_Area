@@ -31,7 +31,7 @@ MethodResponse CuKeepAlive(const ulxr::MethodCall &call) {
 	MethodResponse resp;
 	Array group;
 	Struct st;
-	
+
 	st.addMember("keepAlivePeriod", Value("keepAlivePeriod",RpcString("12")));
 
 	resp.setResult(st);
@@ -44,7 +44,7 @@ MethodResponse GetDepResList(const ulxr::MethodCall &call) {
 	MethodResponse resp;
 	Array group;
 	Struct st, URL;
-	
+
 	st.addMember("totalPkt", Value("totalPkt",Integer(12)));
 	st.addMember("pktNum", Value("pktNum",Integer(9)));
 	URL.addMember("id",Value("id",RpcString("123")));
@@ -63,7 +63,7 @@ MethodResponse GetVideoResList(const ulxr::MethodCall &call) {
 	MethodResponse resp;
 	Array group;
 	Struct st, URL;
-	
+
 	st.addMember("totalPkt", Value("totalPkt",Integer(12)));
 	st.addMember("pktNum", Value("pktNum",Integer(9)));
 	URL.addMember("id",Value("id",RpcString("123")));
@@ -85,15 +85,15 @@ MethodResponse GetAlarmResList(const ulxr::MethodCall &call) {
 	MethodResponse resp;
 	Array group;
 	Struct st, URL;
-	
+
 	st.addMember("totalPkt", Value("totalPkt",Integer(12)));
 	st.addMember("pktNum", Value("pktNum",Integer(9)));
 	URL.addMember("id",Value("id",RpcString("123")));
 	URL.addMember("name",Value("name",RpcString("name_user")));
 	URL.addMember("description",Value("description",RpcString("desc")));
-	
-	
-	
+
+
+
 	group.addItem(Value("URL",URL));
 	st.addMember("group",Value("group",group));
 
@@ -114,7 +114,7 @@ MethodResponse QueryAlarmInfo(const ulxr::MethodCall &call) {
 	URL.addMember("endTime",Value("endTime",RpcString("12:00:00")));
 	URL.addMember("description",Value("description",RpcString("alarm information")));
 	group.addItem(Value("URL",URL));
-	
+
 	URL.clear();
 
 	URL.addMember("id",Value("id",RpcString("324")));
@@ -144,17 +144,17 @@ MethodResponse QueryAlarmRes(const ulxr::MethodCall &call) {
 	MethodResponse resp;
 	Array group;
 	Struct st, URL;
-	
+
 	URL.addMember("id",Value("id",RpcString("123")));
 	URL.addMember("type",Value("type",RpcString("type unknown")));
 	URL.addMember("state",Value("state",RpcString("state unknown")));
-	
+
 	group.addItem(Value("URL",URL));
 	st.addMember("group",Value("group",group));
 
 	resp.setResult(st);
 	resp.setMethodName("QueryAlarmRes");
-	
+
 	return resp;
 }
 
@@ -162,7 +162,7 @@ MethodResponse AlarmHisQuery(const ulxr::MethodCall &call) {
 	MethodResponse resp;
 	Array group;
 	Struct st, URL;
-	
+
 	st.addMember("totalNumber", Value("totalNumber",Integer(12)));
 	st.addMember("currentNumber", Value("currentNumber",Integer(9)));
 	URL.addMember("alarmId",Value("alarmId",RpcString("alarmId_1")));
@@ -188,7 +188,7 @@ MethodResponse PTZCtrl(const ulxr::MethodCall &call) {
 	MethodResponse resp;
 	Array group;
 	Struct st, URL;
-	
+
 	st.addMember("resId", Value("resId",RpcString("res_1")));
 
 	resp.setResult(st);
@@ -200,9 +200,9 @@ MethodResponse PlayQuery(const ulxr::MethodCall &call) {
 	MethodResponse resp;
 	Array group;
 	Struct st, URL;
-	
+
 	st.addMember("resId", Value("resId",RpcString("res_1")));
-	st.addMember("totalNumber", Value("totalNumber",Integer(111))); 
+	st.addMember("totalNumber", Value("totalNumber",Integer(111)));
 	st.addMember("currentNumber", Value("currentNumber",Integer(1515)));
 
 	URL.addMember("startTime",Value("startTime",RpcString("11:00:00")));
@@ -210,7 +210,7 @@ MethodResponse PlayQuery(const ulxr::MethodCall &call) {
 	URL.addMember("size",Value("size",RpcString("1333")));
 
 	st.addMember("recoderURL",Value("recoderURL",URL));
-	
+
 
 	resp.setResult(st);
 	resp.setMethodName("PlayQuery");
@@ -222,11 +222,11 @@ MethodResponse PlayOpen(const ulxr::MethodCall &call) {
 	MethodResponse resp;
 	Array group;
 	Struct st, URL;
-	
+
 	st.addMember("cuId", Value("cuId",RpcString("cuId_1")));
 	st.addMember("resId", Value("resId",RpcString("res_1")));
-	st.addMember("sessionId", Value("sessionId",RpcString("session_1"))); 
-	st.addMember("tcpIp", Value("tcpIp",RpcString("192.168.80.112"))); 
+	st.addMember("sessionId", Value("sessionId",RpcString("session_1")));
+	st.addMember("tcpIp", Value("tcpIp",RpcString("192.168.80.112")));
 	st.addMember("tcpPort", Value("tcpPort",RpcString("5656")));
 
 	resp.setResult(st);
@@ -239,8 +239,8 @@ MethodResponse PlayStart(const ulxr::MethodCall &call) {
 	MethodResponse resp;
 	Array group;
 	Struct st, URL;
-	
-	st.addMember("sessionId", Value("sessionId",RpcString("session_1"))); 
+
+	st.addMember("sessionId", Value("sessionId",RpcString("session_1")));
 
 	resp.setResult(st);
 	resp.setMethodName("PlayStart");
@@ -252,7 +252,7 @@ MethodResponse HisPlayOpen(const ulxr::MethodCall &call) {
 	MethodResponse resp;
 	Array group;
 	Struct st, URL;
-	
+
 	st.addMember("cuId", Value("cuId",RpcString("id_1")));
 	st.addMember("resId", Value("resId",RpcString("res_1")));
 	st.addMember("sessionId",Value("sessionId",RpcString("session_1")));
@@ -269,8 +269,8 @@ MethodResponse HisPlayStart(const ulxr::MethodCall &call) {
 	MethodResponse resp;
 	Array group;
 	Struct st, URL;
-	
-	st.addMember("sessionId", Value("sessionId",RpcString("session_1"))); 
+
+	st.addMember("sessionId", Value("sessionId",RpcString("session_1")));
 
 	resp.setResult(st);
 	resp.setMethodName("HisPlayStart");
@@ -282,7 +282,7 @@ MethodResponse HisLoadOpen(const ulxr::MethodCall &call) {
 	MethodResponse resp;
 	Array group;
 	Struct st, URL;
-	
+
 	st.addMember("cuId", Value("cuId",RpcString("id_1")));
 	st.addMember("resId", Value("resId",RpcString("res_1")));
 	st.addMember("sessionId",Value("sessionId",RpcString("session_1")));
@@ -299,8 +299,8 @@ MethodResponse HisLoadStart(const ulxr::MethodCall &call) {
 	MethodResponse resp;
 	Array group;
 	Struct st, URL;
-	
-	st.addMember("sessionId", Value("sessionId",RpcString("session_1"))); 
+
+	st.addMember("sessionId", Value("sessionId",RpcString("session_1")));
 
 	resp.setResult(st);
 	resp.setMethodName("HisLoadStart");
@@ -312,8 +312,8 @@ MethodResponse PlayClose(const ulxr::MethodCall &call) {
 	MethodResponse resp;
 	Array group;
 	Struct st, URL;
-	
-	st.addMember("sessionId", Value("sessionId",RpcString("session_1"))); 
+
+	st.addMember("sessionId", Value("sessionId",RpcString("session_1")));
 
 	resp.setResult(st);
 	resp.setMethodName("PlayClose");
@@ -325,8 +325,8 @@ MethodResponse PlayCtrl(const ulxr::MethodCall &call) {
 	MethodResponse resp;
 	Array group;
 	Struct st, URL;
-	
-	st.addMember("sessionId", Value("sessionId",RpcString("session_1"))); 
+
+	st.addMember("sessionId", Value("sessionId",RpcString("session_1")));
 
 	resp.setResult(st);
 	resp.setMethodName("PlayCtrl");
@@ -344,6 +344,34 @@ MethodResponse ReportCamResState(const ulxr::MethodCall &call) {
 
 	return resp;
 }
+/***************************************************************************
+ *          核心节点 响应 区域节点
+***************************************************************************/
+#if 0
+MethodResponse MURegister(const ulxr::MethodCall &call) {
+    Integer mu_kp_alive_period;
+    /*** 设置响应参数 ***/
+
+    //确认注册信息 ?????
+    Value in_parm = call.getParm(1);
+
+    mu_kp_alive_period = 10;    //设置 muKeepAlivePeriod
+
+
+    /*** 填充响应 xml 参数 ***/
+	Struct st;
+	st.addMember("muKeepAlivePeriod", Value("muKeepAlivePeriod", mu_kp_alive_period);
+
+	MethodResponse resp;
+	resp.setMethodName("MuRegister");
+	resp.setResult(st);
+    resp.setFault(1, "erro");   //响应指令头：默认成功,无需设置
+
+    return resp;
+}
+
+#endif
+
 
 
 int main(){
@@ -354,7 +382,6 @@ int main(){
 		Protocol *protocol = &prot;
 		prot.setPersistent(true);
 		Dispatcher server(&prot);
-
 		server.addMethod(ulxr::make_method(CuRegister),
 					 Signature() << ulxr::Struct(),
 					 ULXR_PCHAR("CuRegister"),
@@ -525,14 +552,15 @@ int main(){
 		/*for(int i = 0; i < 19; i++){
 			cout << "getsignature " <<server.getMethod(i)->getSignature(true,false) << endl;
 		}*/
+
 		while(1) {
 			MethodCall call = server.waitForCall();
 			cout <<call.getXml() << endl;
 			MethodResponse resp = server.dispatchCall(call);
 			prot.buildResponseHeader("192.168.80.111");
-			
+
 			server.sendResponse(resp);
-			//prot.close();
+			prot.close();   //关闭连接,防止服务器自动退出
 		}
 
 	} catch ( ConnectionException &e) {
@@ -549,7 +577,7 @@ int main(){
 	resp.setResult(st);
 	resp.setCommand("register");
 	cout << resp.getXml() << endl;
-	
+
 	//resp.setFault(0,"error");
 	//cout << resp.getXml() << endl;
 #endif

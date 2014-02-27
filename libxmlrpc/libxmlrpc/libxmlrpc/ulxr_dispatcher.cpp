@@ -331,10 +331,14 @@ ULXR_API_IMPL(MethodCall) Dispatcher::waitForCall(int _timeout)
   MethodCallParser parser;
   bool done = false;
   long readed;
-   
+
   while (!done && ((readed = protocol->readRaw(buffer, sizeof(buffer))) > 0) )
   {
-	  //cout << buffer << endl;
+#if 0
+      cout<<"---------------------waitForCall rcv msg--------------------------------"<<endl;
+	  cout << buffer << endl;
+      cout<<"---------------------waitForCall rcv msg--------------------------------"<<endl;
+#endif
     buff_ptr = buffer;
     while (readed > 0)
     {
@@ -366,7 +370,7 @@ ULXR_API_IMPL(MethodCall) Dispatcher::waitForCall(int _timeout)
 	  //TODO
 	  throw XmlException(1, "error", 0, "error");
   }
-  
+
   return parser.getMethodCall();
 }
 

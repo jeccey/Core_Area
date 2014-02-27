@@ -1,0 +1,115 @@
+#if 0
+#include <ulxmlrpcpp.h>
+#include <ulxr_protocol.h>
+#include <ulxr_tcpip_connection.h>
+#include <ulxr_except.h>
+#include <iostream>
+#include <ulxr_sip_protocol.h>
+#include <ulxr_call.h>
+#include <ulxr_requester.h>
+#include <ulxr_signature.h>
+
+using namespace ulxr;
+using namespace std;
+
+
+MethodCall ReportCamResState() {
+	MethodCall testcall("ReportCamResState");
+	Struct URL;
+	Array group;
+
+	URL.addMember("resId",Value("resId",RpcString("resId_1")));
+	URL.addMember("state",Value("state",RpcString("state_1")));
+	group.addItem(Value("URL",URL));
+	testcall.addParam(Value("group",group));
+
+	return testcall;
+}
+
+int main(){
+	string user = "110@192.168.80.125";
+	string from = "192.168.80.111";
+	string to = "192.168.80.125";
+	string via = "192.168.80.125";
+	string cseq = "1";
+	string call_id = "qega444afa4g6aga4g";
+
+	try{
+		TcpIpConnection conn (0,"localhost",9966);
+		SipProtocol prot(&conn);
+		Protocol *protocol = &prot;
+		prot.setPersistent(true);
+		ulxr::Requester client(&prot);
+
+		/*prot.buildRequestHeader(user,from,to,via,cseq,call_id);
+		cout << client.call(CuRegister(),"").getXml() << endl;
+
+		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
+		cout << client.call(CuKeepAlive(),"").getXml() << endl;
+
+		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
+		cout << client.call(GetDepResList(),"").getXml() << endl;
+
+		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
+		cout << client.call(GetVideoResList(),"").getXml() << endl;
+
+		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
+		cout << client.call(GetAlarmResList(),"").getXml() << endl;
+
+		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
+		cout << client.call(QueryAlarmInfo(),"").getXml() << endl;
+
+		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
+		cout << client.call(ReportAlarmRes(),"").getXml() << endl;
+
+		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
+		cout << client.call(QueryAlarmRes(),"").getXml() << endl;
+
+		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
+		cout << client.call(AlarmHisQuery(),"").getXml() << endl;
+
+		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
+		cout << client.call(PTZCtrl(),"").getXml() << endl;
+
+		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
+		cout << client.call(PlayQuery(),"").getXml() << endl;
+
+		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
+		cout << client.call(PlayOpen(),"").getXml() << endl;
+
+		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
+		cout << client.call(PlayStart(),"").getXml() << endl;
+
+		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
+		cout << client.call(HisPlayOpen(),"").getXml() << endl;
+
+		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
+		cout << client.call(HisPlayStart(),"").getXml() << endl;
+
+		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
+		cout << client.call(HisLoadOpen(),"").getXml() << endl;
+
+		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
+		cout << client.call(HisLoadStart(),"").getXml() << endl;
+
+		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
+		cout << client.call(PlayClose(),"").getXml() << endl;
+
+		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
+		cout << client.call(PlayCtrl(),"").getXml() << endl;*/
+
+        while(1)
+        {
+            int d;
+            cin>>d;
+		    prot.buildRequestHeader(user,from,to,via,cseq,call_id);
+		    cout << client.call(ReportCamResState(),"").getXml() << endl;
+        }
+
+		//ReportCamResState
+	} catch ( ConnectionException &e) {
+		cout << e.what() << endl;
+	}
+	return 0;
+}
+#endif

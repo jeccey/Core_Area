@@ -56,16 +56,16 @@
 ##==========================================================================
 
 # The pre-processor and compiler options.
-MY_CFLAGS = -I./ -I/home/jeccey/project/Core_Area/libxmlrpc/libxmlrpc/libxmlrpc
+MY_CFLAGS = -I./ -I/home/aegean/project/ACI/xerces-sdk/include
 
 # The linker options.
-MY_LIBS   = -lxmlrpc
+MY_LIBS   =
 
 # The pre-processor options used by the cpp (man cpp for more).
-CPPFLAGS  = -Wall -fPIC -std=c++0x
+CPPFLAGS  = -Wall -fPIC
 
 # The options used in linking as well as in any direct use of ld.
-LDFLAGS   = -L/home/jeccey/project/Core_Area/libxmlrpc/libxmlrpc/libxmlrpc
+LDFLAGS   = -shared
 
 # The directories in which source files reside.
 # If not specified, only the current directory will be serached.
@@ -73,7 +73,7 @@ SRCDIRS   =
 
 # The executable file name.
 # If not specified, current directory name or `a.out' will be used.
-PROGRAM   = xmlserver 
+PROGRAM   = libtest.so
 
 ## Implicit Section: change the following only when necessary.
 ##==========================================================================
