@@ -35,9 +35,6 @@
 #include <string>
 #include <map>
 
-//#include <ulxmlrpcpp/ulxr_callparse_base.h>
-//#include <ulxmlrpcpp/ulxr_valueparse.h>
-
 //xerces headers
 #include <xercesc/parsers/XercesDOMParser.hpp>
 #include <xercesc/dom/DOM.hpp>
@@ -63,17 +60,17 @@ public:
 	int parse(CppString buffer);
 private:
 	Value getSimpleValue(DOMNode *parametersNode, string valueName, ValueType type);
-	//Value getStructValue(DOMNode *parametersNode, string valueName, map<string,string> fieldValueMap);
 	Value getStructValue(DOMNode *parametersNode, string valueName, unordered_map<string,string> fieldValueMap, int index = 0);
 	Value getArrayValue(DOMNode *parametersNode, string valueName, string itemName, unordered_map<string,string> itemFieldValueMap);
+	Value getReportAlarmRes(DOMNode *parametersNode, string valueName, string itemName, unordered_map<string,string> itemFieldValueMap);//特殊处理
 	int parseCuRegister(DOMNode *parametersNode);
 	int parseCuKeepAlive(DOMNode *parametersNode);
 	int parseGetDepResList(DOMNode *parametersNode);
 	int parseGetVideoResList(DOMNode *parametersNode);
 	int parseGetAlarmResList(DOMNode *parametersNode);
 	int parseQueryAlarmInfo(DOMNode *parametersNode);
-	int parseReportAlarmRes(DOMNode *parametersNode);
-	int parseQueryAlarmRes(DOMNode *parametersNode);
+	int parseReportAlarmRes(DOMNode *parametersNode);       //与B类接口共用
+	int parseQueryAlarmRes(DOMNode *parametersNode);        //与B类接口共用
 	int parseAlarmHisQuery(DOMNode *parametersNode);
 	int parsePTZCtrl(DOMNode *parametersNode);
 	int parsePlayQuery(DOMNode *parametersNode);
@@ -85,12 +82,49 @@ private:
 	int parseHisLoadStart(DOMNode *parametersNode);
 	int parsePlayClose(DOMNode *parametersNode);
 	int parsePlayCtrl(DOMNode *parametersNode);
-	int parseReportCamResState(DOMNode *parametersNode);
+	int parseReportCamResState(DOMNode *parametersNode);    //与B类接口共用
 	int parseGetCamResState(DOMNode *parametersNode);
-	
+
+    /********************************************************************
+     *      解析请求参数 （AreaNode ---> CoreNode）
+     *******************************************************************/
+	int parseMURegister(DOMNode *parametersNode);
+	int parseResReport(DOMNode *parametersNode);
+    int parseResChange(DOMNode *parametersNode);
+    int parseMUKeepAlive(DOMNode *parametersNode);
+    int parseUserResReport(DOMNode *parametersNode);
+    int parseUserResChange(DOMNode *parametersNode);
+    int parseAlarmResListReport(DOMNode *parametersNode);
+    int parseAlarmResListChange(DOMNode *parametersNode);
+    //int parseReportCamResState(DOMNode *parametersNode);    //与A类接口共用
+    //int parseReportAlarmRes(DOMNode *parametersNode);       //与A类接口共用
+
+    /********************************************************************
+     *      解析请求参数 （CoreNode ---> AreaNode）
+     *******************************************************************/
+    int parseQueryHistoryFiles(DOMNode *parametersNode);
+    int parseStartMediaReq(DOMNode *parametersNode);
+    int parseINFO(DOMNode *parametersNode);
+    int parseStopMediaReq(DOMNode *parametersNode);
+    int parseStartPlayBack(DOMNode *parametersNode);
+    int parseHisInfo(DOMNode *parametersNode);
+    int parseControlFileBack(DOMNode *parametersNode);
+    int parseStartHisLoad(DOMNode *parametersNode);
+    int parseHisLoadInfo(DOMNode *parametersNode);
+    int parseReqCamResState(DOMNode *parametersNode);
+    int parseGetUserCurState(DOMNode *parametersNode);
+    int parseSetUserCamManage(DOMNode *parametersNode);
+    int parseAlarmResSubscribe(DOMNode *parametersNode);
+    //int parseQueryAlarmRes(DOMNode *parametersNode);        //与A类接口共用
+    int parseReportAlarmInfo(DOMNode *parametersNode);
+    int parseControlPTZ(DOMNode *parametersNode);
+    int parseResTransOrder(DOMNode *parametersNode);
+    int parseResChangeOrder(DOMNode *parametersNode);
+
+
 private:
 	MethodCall call;
-	int (MethodCallParser::*parser[22])(DOMNode *parametersNodes);
+	int (MethodCallParser::*parser[50])(DOMNode *parametersNodes);
 	map<string,int> cmdMap;
 };
 

@@ -310,7 +310,7 @@ ULXR_API_IMPL(void)
 
 ULXR_API_IMPL(MethodCall) Dispatcher::waitForCall(int _timeout)
 {
-	
+
   ULXR_TRACE(ULXR_PCHAR("waitForCall"));
   if (!protocol->isOpen())
   {
@@ -319,7 +319,7 @@ ULXR_API_IMPL(MethodCall) Dispatcher::waitForCall(int _timeout)
   }
   else
     protocol->resetConnection();
- 
+
 #ifdef ULXR_ENFORCE_NON_PERSISTENT
   protocol->setPersistent(false);
 #endif
@@ -337,7 +337,6 @@ ULXR_API_IMPL(MethodCall) Dispatcher::waitForCall(int _timeout)
 #if 0
       cout<<"---------------------waitForCall rcv msg--------------------------------"<<endl;
 	  cout << buffer << endl;
-      cout<<"---------------------waitForCall rcv msg--------------------------------"<<endl;
 #endif
     buff_ptr = buffer;
     while (readed > 0)
@@ -365,12 +364,15 @@ ULXR_API_IMPL(MethodCall) Dispatcher::waitForCall(int _timeout)
 //        || parser->isComplete())
       done = true;
   }
- //cout << super_data << endl;
+#if 1
+    cout<<"-------waitForCall rcv msg:super_data ------------------------"<<endl;
+    cout << super_data << endl;   //for test
+    cout<<"-------waitForCall rcv msg end ------------------------"<<endl;
+#endif
   if(!parser.parse(super_data)){
 	  //TODO
 	  throw XmlException(1, "error", 0, "error");
   }
-
   return parser.getMethodCall();
 }
 

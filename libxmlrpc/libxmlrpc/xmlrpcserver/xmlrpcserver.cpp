@@ -131,32 +131,7 @@ MethodResponse QueryAlarmInfo(const ulxr::MethodCall &call) {
 	return resp;
 }
 
-MethodResponse ReportAlarmRes(const ulxr::MethodCall &call) {
-	MethodResponse resp;
 
-	resp.setResult(Value());
-	resp.setMethodName("ReportAlarmRes");
-
-	return resp;
-}
-
-MethodResponse QueryAlarmRes(const ulxr::MethodCall &call) {
-	MethodResponse resp;
-	Array group;
-	Struct st, URL;
-
-	URL.addMember("id",Value("id",RpcString("123")));
-	URL.addMember("type",Value("type",RpcString("type unknown")));
-	URL.addMember("state",Value("state",RpcString("state unknown")));
-
-	group.addItem(Value("URL",URL));
-	st.addMember("group",Value("group",group));
-
-	resp.setResult(st);
-	resp.setMethodName("QueryAlarmRes");
-
-	return resp;
-}
 
 MethodResponse AlarmHisQuery(const ulxr::MethodCall &call) {
 	MethodResponse resp;
@@ -334,19 +309,122 @@ MethodResponse PlayCtrl(const ulxr::MethodCall &call) {
 	return resp;
 }
 
-MethodResponse ReportCamResState(const ulxr::MethodCall &call) {
+//A.2.8 告警信息上报
+MethodResponse ReportAlarmRes(const ulxr::MethodCall &call) {
 	MethodResponse resp;
-	Array group;
-	Struct st, URL;
 
 	resp.setResult(Value());
+	resp.setMethodName("ReportAlarmRes");
+
+	return resp;
+}
+//A.2.21 摄像机状态上报
+MethodResponse ReportCamResState(const ulxr::MethodCall &call) {
+	MethodResponse resp;
+
+	//resp.setResult(Value());
+	resp.setFault(2, " erro");   //响应指令头：默认成功,无需设置
 	resp.setMethodName("ReportCamResState");
 
 	return resp;
 }
+#if 0
+//A.2.9 订阅告警的状态查询—— 与B类共用
+MethodResponse QueryAlarmRes(const ulxr::MethodCall &call) {
+	MethodResponse resp;
+	Array group;
+	Struct st, URL;
+
+	URL.addMember("id",Value("id",RpcString("123")));
+	URL.addMember("type",Value("type",RpcString("type unknown")));
+	URL.addMember("state",Value("state",RpcString("state unknown")));
+
+	group.addItem(Value("URL",URL));
+	URL.clear();
+    URL.addMember("id",Value("id",RpcString("12333333333333")));
+	URL.addMember("type",Value("type",RpcString("type unknown3333333333")));
+	URL.addMember("state",Value("state",RpcString("state unknown33333333333")));
+
+	group.addItem(Value("URL",URL));
+	st.addMember("group",Value("group",group));
+
+	resp.setResult(st);
+	resp.setMethodName("QueryAlarmRes");
+
+	return resp;
+}
+#endif
 /***************************************************************************
- *          核心节点 响应 区域节点
+ *          核心节点 响应 区域节点 函数
 ***************************************************************************/
+//B.2.24 告警信息上报--与A类接口共用
+MethodResponse ReportAlarmRes_B(const ulxr::MethodCall &call) {
+	MethodResponse resp;
+	Array group;
+	Struct st, URL;
+
+	st.addMember("muId", Value("muId",RpcString("session_1")));
+
+	resp.setResult(st);  // resp.setFault(2, " ReportAlarmRes_B erro");   //响应指令头：默认成功,无需设置
+	resp.setMethodName("ReportAlarmRes");
+
+	return resp;
+}
+//B.2.15 摄像机状态上报——与A类共用
+MethodResponse ReportCamResState_B(const ulxr::MethodCall &call) {
+	MethodResponse resp;
+	Array group;
+	Struct st;
+    Struct URL;
+
+	URL.addMember("resId", Value("resId", RpcString("resid_1231111a")));
+    group.addItem(Value("URL",URL));
+	URL.clear();
+    URL.addMember("resId", Value("resId", RpcString("resid5555555555555")));
+    group.addItem(Value("URL",URL));
+	st.addMember("group",Value("group",group));
+
+    resp.setMethodName("ReportCamResState");
+	resp.setResult(st);
+
+
+	return resp;
+}
+//B.2.25 订阅告警的信息查询—— 与A类共用
+MethodResponse QueryAlarmRes_B(const ulxr::MethodCall &call) {
+	MethodResponse resp;
+	Array group;
+	Struct st, URL, url;
+    url.addMember("resId", Value("resId", RpcString("33333333")));
+    url.addMember("time", Value("time", RpcString("33333333")));
+	URL.addMember("id",Value("id",RpcString("123")));
+	URL.addMember("type",Value("type",RpcString("type unknown")));
+	URL.addMember("time",Value("time",RpcString("type ---------------")));
+	URL.addMember("state",Value("state", Integer(0)));
+	URL.addMember("alarmHisRecord",Value("alarmHisRecord", Integer(1)));
+    URL.addMember("url", Value("url", url));
+
+	group.addItem(Value("URL",URL));
+    url.clear(); 
+    url.addMember("resId", Value("resId", RpcString("4444444")));
+    url.addMember("time", Value("time", RpcString("444444")));
+	URL.clear();
+    URL.addMember("id",Value("id",RpcString("12333333333333")));
+	URL.addMember("type",Value("type",RpcString("type unknown44444")));
+	URL.addMember("time",Value("time",RpcString("type -44444444-")));
+	URL.addMember("state",Value("state", Integer(0)));
+	URL.addMember("alarmHisRecord",Value("alarmHisRecord", Integer(1)));
+    URL.addMember("url", Value("url", url));
+
+	group.addItem(Value("URL",URL));
+	st.addMember("group",Value("group",group));
+
+	resp.setResult(st);
+	resp.setMethodName("QueryAlarmRes");
+
+	return resp;
+}
+
 #if 0
 MethodResponse MURegister(const ulxr::MethodCall &call) {
     Integer mu_kp_alive_period;
@@ -371,6 +449,18 @@ MethodResponse MURegister(const ulxr::MethodCall &call) {
 }
 
 #endif
+MethodResponse MUKeepAlive(const ulxr::MethodCall &call) {
+	MethodResponse resp;
+	Struct st;
+
+	st.addMember("muKeepAlivePeriod", Value("muKeepAlivePeriod",RpcString("122")));
+
+	resp.setResult(st);
+	resp.setMethodName("MUKeepAlive");
+    resp.setFault(1, "erro");   //响应指令头：默认成功,无需设置
+
+    return resp;
+}
 
 
 
@@ -382,6 +472,8 @@ int main(){
 		Protocol *protocol = &prot;
 		prot.setPersistent(true);
 		Dispatcher server(&prot);
+
+        //Signature()<< 客户端请求函数参数
 		server.addMethod(ulxr::make_method(CuRegister),
 					 Signature() << ulxr::Struct(),
 					 ULXR_PCHAR("CuRegister"),
@@ -423,18 +515,6 @@ int main(){
 					 <<ulxr::Integer()
 					 <<ulxr::Array(),
                      ULXR_PCHAR("QueryAlarmInfo"));
-		server.addMethod(ulxr::make_method(ReportAlarmRes),
-                     Signature() << ulxr::Struct(),
-                     ULXR_PCHAR("ReportAlarmRes"),
-                     Signature() << ulxr::Array(),
-                     ULXR_PCHAR("ReportAlarmRes"));
-		server.addMethod(ulxr::make_method(QueryAlarmRes),
-                     Signature() << ulxr::Struct(),
-                     ULXR_PCHAR("QueryAlarmRes"),
-                     Signature() << ulxr::RpcString()
-					 <<ulxr::RpcString()
-					 <<ulxr::Array(),
-                     ULXR_PCHAR("QueryAlarmRes"));
 		server.addMethod(ulxr::make_method(AlarmHisQuery),
                      Signature() << ulxr::Struct(),
                      ULXR_PCHAR("AlarmHisQuery"),
@@ -544,23 +624,76 @@ int main(){
 					 <<ulxr::RpcString()
 					 <<ulxr::Integer(),
                      ULXR_PCHAR(" PlayCtrl"));
+		//A.2.8 告警信息上报—— A类接口
+		server.addMethod(ulxr::make_method(ReportAlarmRes),
+                     Signature() << ulxr::Struct(),
+                     ULXR_PCHAR("ReportAlarmRes"),
+                     Signature() << ulxr::Array(),
+                     ULXR_PCHAR("ReportAlarmRes"));
+		//A.2.21 摄像机状态上报—— A类接口
 		server.addMethod(ulxr::make_method( ReportCamResState),
                      Signature() << ulxr::Struct(),
                      ULXR_PCHAR("ReportCamResState"),
-                     Signature() << ulxr::Array(),
+                     Signature() <<ulxr::Array(),
                      ULXR_PCHAR("ReportCamResState"));
-		/*for(int i = 0; i < 19; i++){
-			cout << "getsignature " <<server.getMethod(i)->getSignature(true,false) << endl;
-		}*/
+#if 0        //A.2.9 订阅告警的状态查询—— 与B类共用
+		server.addMethod(ulxr::make_method(QueryAlarmRes),
+                     Signature() << ulxr::Struct(),
+                     ULXR_PCHAR("QueryAlarmRes"),
+                     Signature() << ulxr::RpcString()
+					 <<ulxr::RpcString()
+					 <<ulxr::Array(),
+                     ULXR_PCHAR("QueryAlarmRes"));
+#endif
+        /************************************************************************************
+         *  Area_Node ---> Core_Node
+         ***********************************************************************************/
+		//B.2.24 告警信息上报—— B类接口
+        server.addMethod(ulxr::make_method(ReportAlarmRes_B),
+                     Signature() << ulxr::Struct(),
+                     ULXR_PCHAR("ReportAlarmRes"),//解析库中对应的名字
+                     Signature() << ulxr::RpcString()
+					 <<ulxr::RpcString()
+                     <<ulxr::Array(),
+                     ULXR_PCHAR("ReportAlarmRes"));
+		//B.2.15 摄像机状态上报—— B类接口
+		server.addMethod(ulxr::make_method( ReportCamResState_B),
+                     Signature() << ulxr::Struct(),
+                     ULXR_PCHAR("ReportCamResState"),
+                     Signature() <<ulxr::RpcString()
+                     <<ulxr::Array(),
+                     ULXR_PCHAR("ReportAlarmRes"));
+        //B.2.25 订阅告警的信息查询—— 与A类共用
+        server.addMethod(ulxr::make_method(QueryAlarmRes_B),
+                     Signature() << ulxr::Struct(),
+                     ULXR_PCHAR("QueryAlarmRes"),
+                     Signature() << ulxr::RpcString()
+					 <<ulxr::RpcString()
+					 <<ulxr::Array(),
+                     ULXR_PCHAR("QueryAlarmRes_interface_B"));
 
+
+		server.addMethod(ulxr::make_method(MUKeepAlive),
+					 Signature() << ulxr::Struct(),
+					 ULXR_PCHAR("MUKeepAlive"),
+                     Signature() << ulxr::RpcString(),
+                     ULXR_PCHAR("MUKeepAlive"));
+/*
+		for(int i = 0; i < 19; i++){
+			cout << "getsignature " <<server.getMethod(i)->getSignature(true,false) << endl;
+		}
+*/
 		while(1) {
-			MethodCall call = server.waitForCall();
-			cout <<call.getXml() << endl;
-			MethodResponse resp = server.dispatchCall(call);
+			MethodCall in_parm_call = server.waitForCall();
+            cout<<"************server rcv msg: call.getXml()***************************"<<endl;
+			cout <<in_parm_call.getXml() << endl;
+
+            //构造响应消息并发送
+			MethodResponse resp = server.dispatchCall(in_parm_call);
 			prot.buildResponseHeader("192.168.80.111");
 
 			server.sendResponse(resp);
-			prot.close();   //关闭连接,防止服务器自动退出
+			prot.close();   //主动关闭连接,防止服务器自动退出
 		}
 
 	} catch ( ConnectionException &e) {

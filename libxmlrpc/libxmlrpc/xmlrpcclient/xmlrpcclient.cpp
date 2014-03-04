@@ -11,6 +11,7 @@
 using namespace ulxr;
 using namespace std;
 
+#if 0
 MethodCall CuRegister() {
 	MethodCall testcall("CuRegister");
 
@@ -76,7 +77,6 @@ MethodCall GetAlarmResList() {
 
 	return testcall;
 }
-
 MethodCall QueryAlarmInfo() {
 	MethodCall testcall ("QueryAlarmInfo");
 	Struct URL;
@@ -100,51 +100,19 @@ MethodCall QueryAlarmInfo() {
 	URL.addMember("startTime",startTime);
 	URL.addMember("endTime",endTime);
 	group.addItem(Value("URL",URL));
-	testcall.addParam(Value("group", group));
 
-	return testcall;
-}
-
-MethodCall ReportAlarmRes() {
-	MethodCall testcall("ReportAlarmRes");
-	Struct URL;
-	Array group;
-
-	URL.addMember("id",Value("id",RpcString("id_1")));
-	URL.addMember("type",Value("type",RpcString("warning")));
-	URL.addMember("startTime", Value("startTime", RpcString("11:00:00")));
-	URL.addMember("endTime", Value("endTime", RpcString("12:00:00")));
-	URL.addMember("targetInfo", Value("targetInfo", RpcString("target_1")));
-	URL.addMember("level", Value("level",Integer(1)));
-	URL.addMember("state", Value("state",Integer(2)));
-	URL.addMember("description", Value("description", RpcString("description_1")));
-
+    URL.clear();
+    URL.addMember("id",Value("id",RpcString("id_6666666")));
+    URL.addMember("type",Value("type",RpcString("id_6666666")));
+    URL.addMember("startTime",Value("startTime",RpcString("id_6666666")));
+    URL.addMember("endTime",Value("endTime",RpcString("id_6666666")));
 	group.addItem(Value("URL",URL));
 
-	testcall.addParam(Value("group", group));
+    testcall.addParam(Value("group", group));
 
 	return testcall;
 }
 
-MethodCall QueryAlarmRes() {
-	MethodCall testcall("QueryAlarmRes");
-	Struct URL;
-	Array group;
-
-	Value param1("cuId",RpcString("id_123"));
-	Value param2("cuUserId", RpcString("user_1"));
-
-	URL.addMember("id",Value("id",RpcString("id_1")));
-	URL.addMember("type",Value("type",RpcString("warning")));
-	URL.addMember("state",Value("state",RpcString("state unknown")));
-	group.addItem(Value("URL",URL));
-
-	testcall.addParam(param1);
-	testcall.addParam(param2);
-	testcall.addParam(Value("group", group));
-
-	return testcall;
-}
 
 MethodCall AlarmHisQuery() {
 	MethodCall testcall("AlarmHisQuery");
@@ -389,30 +357,178 @@ MethodCall PlayCtrl() {
 
 	return testcall;
 }
+#endif
+#if 0
+//A.2.8 告警信息上报----与B类共用
+MethodCall ReportAlarmRes() {
+	MethodCall testcall("ReportAlarmRes");
+	Struct URL;
+	Array group;
 
+	URL.addMember("id",Value("id",RpcString("id_1")));
+	URL.addMember("type",Value("type",RpcString("warning")));
+	URL.addMember("startTime", Value("startTime", RpcString("11:00:00")));
+	URL.addMember("endTime", Value("endTime", RpcString("12:00:00")));
+	URL.addMember("targetInfo", Value("targetInfo", RpcString("target_1")));
+	URL.addMember("level", Value("level",Integer(1)));
+	URL.addMember("state", Value("state",Integer(2)));
+	URL.addMember("description", Value("description", RpcString("description_1")));
+
+	group.addItem(Value("URL",URL));
+
+	testcall.addParam(Value("group", group));
+
+	return testcall;
+}
+//A.2.21 摄像机状态上报——与B类共用
 MethodCall ReportCamResState() {
 	MethodCall testcall("ReportCamResState");
 	Struct URL;
 	Array group;
 
-	URL.addMember("resId",Value("resId",RpcString("resId_1233333333333333")));
+	URL.addMember("resId",Value("resId",RpcString("resId_555555")));
 	URL.addMember("state",Value("state",RpcString("state_1")));
 	group.addItem(Value("URL",URL));
-	testcall.addParam(Value("group",group));
+
+    URL.clear();
+    URL.addMember("resId",Value("resId",RpcString("resId_6666666")));
+	URL.addMember("state",Value("state",RpcString("state_6666666666")));
+	group.addItem(Value("URL",URL));
+
+    testcall.addParam(Value("group",group));
 
 	return testcall;
 }
+//A.2.9 订阅告警的状态查询—— 与B类共用
+MethodCall QueryAlarmRes() {
+	MethodCall testcall("QueryAlarmRes");
+	Struct URL;
+	Array group;
+
+	Value param1("cuId",RpcString("id_123"));
+	Value param2("cuUserId", RpcString("user_1"));
+
+	URL.addMember("id",Value("id",RpcString("id_1")));
+	URL.addMember("type",Value("type",RpcString("warning")));
+	URL.addMember("state",Value("state",RpcString("state unknown")));
+	group.addItem(Value("URL",URL));
+    URL.clear();
+	URL.addMember("id",Value("id",RpcString("id_222222222222222")));
+	URL.addMember("type",Value("type",RpcString("warning2222222")));
+	URL.addMember("state",Value("state",RpcString("state unknown222222222")));
+	group.addItem(Value("URL",URL));
+	
+    testcall.addParam(param1);
+	testcall.addParam(param2);
+	testcall.addParam(Value("group", group));
+
+	return testcall;
+}
+#endif
 /********************************************************************************
  *      AreaNode ---> CoreNode
  *******************************************************************************/
-MethodCall MUKeepAlive() {
-	MethodCall testcall("MURegister");
+#if 1
+//B.2.24 告警信息上报----与A类共用
+MethodCall ReportAlarmRes() {
+    MethodCall in_parm("ReportAlarmRes");
+    Struct URL, url;
+    Array group;
 
-	Value param1("MUKeepAlivePeriod",RpcString("100"));
+    Value param1("muId", RpcString("muid_123"));
+    Value param2("muName", RpcString("muName_sp"));
 
-	testcall.addParam(param1);
+    url.addMember("resId", Value("resId", RpcString("resid_1")));
+    url.addMember("time", Value("time", RpcString("2014-02-25 11:00:00")));
+
+    URL.addMember("id", Value("id", RpcString("id_1")));
+    URL.addMember("type", Value("type", RpcString("2")));
+    URL.addMember("startTime", Value("startTime", RpcString("2014-02-25 11:00:00")));
+    URL.addMember("endTime", Value("endTime", RpcString("2014-02-25 11:00:00")));
+    URL.addMember("targetInfo", Value("targetInfo", RpcString("info_123")));
+    URL.addMember("level", Value("level", Integer("1")));
+    URL.addMember("state", Value("state", RpcString("2")));
+    URL.addMember("description", Value("description", RpcString("info_123")));
+    URL.addMember("alarmHisRecord", Value("alarmHisRecord", RpcString("warn")));
+
+    URL.addMember("url", Value("url", url));
+    group.addItem(Value("URL", URL));
+
+    url.clear();
+    url.addMember("resId", Value("resId", RpcString("resid_35")));
+    url.addMember("time", Value("time", RpcString("2015-02-25 11:00:00")));
+    URL.clear();
+    URL.addMember("id", Value("id", RpcString("id_2")));
+    URL.addMember("type", Value("type", RpcString("3")));
+    URL.addMember("startTime", Value("startTime", RpcString("2015-02-25 11:00:00")));
+    URL.addMember("endTime", Value("endTime", RpcString("2015-02-25 11:00:00")));
+    URL.addMember("targetInfo", Value("targetInfo", RpcString("info_3123")));
+    URL.addMember("level", Value("level", Integer("51")));
+    URL.addMember("state", Value("state", RpcString("52")));
+    URL.addMember("description", Value("description", RpcString("info_5123")));
+    URL.addMember("alarmHisRecord", Value("alarmHisRecord", RpcString("warn5")));
+    URL.addMember("url", Value("url", url));
+    group.addItem(Value("URL", URL));
+
+
+    in_parm.addParam(param1);
+    in_parm.addParam(param2);
+    in_parm.addParam(Value("group", group));
+
+    return in_parm;
+}
+//B.2.15 摄像机状态上报——与A类共用
+MethodCall ReportCamResState() {
+	MethodCall testcall("ReportCamResState");
+	Struct URL;
+	Array group;
+
+    Value param1("muId", RpcString("muId_12"));
+
+	URL.addMember("resId",Value("resId",RpcString("resId_1233333333333333")));
+	URL.addMember("state",Value("state",RpcString("state_1")));
+	group.addItem(Value("URL",URL));
+	URL.clear();
+    URL.addMember("resId",Value("resId",RpcString("resId_44444444444444444444444")));
+	URL.addMember("state",Value("state",RpcString("state_1")));
+	group.addItem(Value("URL",URL));
+
+    testcall.addParam(param1);
+    testcall.addParam(Value("group",group));
 
 	return testcall;
+}
+//B.2.25 订阅告警的信息查询—— 与A类共用
+MethodCall QueryAlarmRes() {
+	MethodCall testcall("QueryAlarmRes");
+	Struct URL;
+	Array group;
+
+	Value param1("muId",RpcString("id_666666666666"));
+	Value param2("muName", RpcString("6666666666666"));
+
+	URL.addMember("id",Value("id",RpcString("id_1")));
+	URL.addMember("type",Value("type",RpcString("warning")));
+	group.addItem(Value("URL",URL));
+    URL.clear();
+	URL.addMember("id",Value("id",RpcString("id_222222222222222")));
+	URL.addMember("type",Value("type",RpcString("warning2222222")));
+	group.addItem(Value("URL",URL));
+
+    testcall.addParam(param1);
+	testcall.addParam(param2);
+	testcall.addParam(Value("group", group));
+
+	return testcall;
+}
+#endif
+MethodCall MUKeepAlive() {
+	MethodCall testcall("MUKeepAlive");
+
+	Value param1("muKeepAlivePeriod",RpcString("200"));
+
+	testcall.addParam(param1);
+    return testcall;
 }
 
 
@@ -427,74 +543,14 @@ int main(){
 	try{
 		TcpIpConnection conn (0,"localhost",9966);
 		SipProtocol prot(&conn);
-		Protocol *protocol = &prot;
+	    //Protocol *protocol = &prot;
 		prot.setPersistent(true);
 		ulxr::Requester client(&prot);
-		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
-		cout << client.call(CuRegister(),"").getXml() << endl;
-/*
-		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
-		cout << client.call(MUKeepAlive(),"").getXml() << endl;
+//For test
+		prot.buildRequestHeader(user,from,to,via,cseq,call_id);//设置 sip 头部
+        cout<<"************ client rcv resopnse msg: ****************************"<<endl;
 
-		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
-		cout << client.call(CuRegister(),"").getXml() << endl;
-
-        prot.buildRequestHeader(user,from,to,via,cseq,call_id);
-		cout << client.call(CuKeepAlive(),"").getXml() << endl;
-
-		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
-		cout << client.call(GetDepResList(),"").getXml() << endl;
-
-		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
-		cout << client.call(GetVideoResList(),"").getXml() << endl;
-
-		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
-		cout << client.call(GetAlarmResList(),"").getXml() << endl;
-
-		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
-		cout << client.call(QueryAlarmInfo(),"").getXml() << endl;
-
-		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
-		cout << client.call(ReportAlarmRes(),"").getXml() << endl;
-
-		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
-		cout << client.call(QueryAlarmRes(),"").getXml() << endl;
-
-		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
-		cout << client.call(AlarmHisQuery(),"").getXml() << endl;
-
-		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
-		cout << client.call(PTZCtrl(),"").getXml() << endl;
-
-		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
-		cout << client.call(PlayQuery(),"").getXml() << endl;
-
-		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
-		cout << client.call(PlayOpen(),"").getXml() << endl;
-
-		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
-		cout << client.call(PlayStart(),"").getXml() << endl;
-
-		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
-		cout << client.call(HisPlayOpen(),"").getXml() << endl;
-
-		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
-		cout << client.call(HisPlayStart(),"").getXml() << endl;
-
-		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
-		cout << client.call(HisLoadOpen(),"").getXml() << endl;
-
-		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
-		cout << client.call(HisLoadStart(),"").getXml() << endl;
-
-		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
-		cout << client.call(PlayClose(),"").getXml() << endl;
-
-		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
-		cout << client.call(PlayCtrl(),"").getXml() << endl;
-
-		prot.buildRequestHeader(user,from,to,via,cseq,call_id);
-		cout << client.call(CuRegister(),"").getXml() << endl;*/
+	    cout << client.call(QueryAlarmRes(),"").getXml() << endl;
 
 	} catch ( ConnectionException &e) {
 		cout << e.what() << endl;

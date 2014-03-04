@@ -111,6 +111,101 @@ MethodResponseParser::MethodResponseParser() {
 
 	parser[20] = &MethodResponseParser::parseReportCamResState;
 	cmdMap.insert(pair<string,int>("GetCamResState",20));
+
+	/*******************************************************************
+     *  AreaNode ---> CoreNode
+    ******************************************************************/
+    parser[24] = &MethodResponseParser::parseMUKeepAlive;
+    cmdMap.insert(pair<string, int>("MUKeepAlive", 24));
+#if 1
+    parser[21] = &MethodResponseParser::parseMURegister;
+	cmdMap.insert(pair<string,int>("MURegister",21));
+
+	parser[22] = &MethodResponseParser::parseResReport;
+	cmdMap.insert(pair<string,int>("ResReport",22));
+
+    parser[23] = &MethodResponseParser::parseResChange;
+    cmdMap.insert(pair<string, int>("ResChange", 23));
+
+    parser[24] = &MethodResponseParser::parseMUKeepAlive;
+    cmdMap.insert(pair<string, int>("MUKeepAlive", 24));
+
+    parser[25] = &MethodResponseParser::parseReportCamResState;
+    cmdMap.insert(pair<string, int>("ReportCamResState", 25));
+
+    parser[26] = &MethodResponseParser::parseUserResReport;
+    cmdMap.insert(pair<string, int>("UserResReport", 26));
+
+    parser[27] = &MethodResponseParser::parseUserResChange;
+    cmdMap.insert(pair<string, int>("UserResChange", 27));
+
+    parser[28] = &MethodResponseParser::parseAlarmResListReport;
+    cmdMap.insert(pair<string, int>("AlarmResListReport", 28));
+
+    parser[29] = &MethodResponseParser::parseAlarmResListChange;
+    cmdMap.insert(pair<string, int>("AlarmResListChange", 29));
+
+    parser[30] = &MethodResponseParser::parseReportAlarmRes;
+    cmdMap.insert(pair<string, int>("ReportAlarmRes", 30));
+    /*******************************************************************
+     *  CoreNode ---> AreaNode
+     ******************************************************************/
+    parser[31] = &MethodResponseParser::parseQueryHistoryFiles;
+    cmdMap.insert(pair<string, int>("QueryHistoryFiles", 31));
+
+    parser[32] = &MethodResponseParser::parseStartMediaReq;
+    cmdMap.insert(pair<string, int>("StartMediaReq", 32));
+
+    parser[33] = &MethodResponseParser::parseINFO;
+    cmdMap.insert(pair<string, int>("INFO", 33));
+
+    parser[34] = &MethodResponseParser::parseStopMediaReq;
+    cmdMap.insert(pair<string, int>("StopMediaReq", 34));
+
+    parser[35] = &MethodResponseParser::parseStartPlayBack;
+    cmdMap.insert(pair<string, int>("StartPlayBack", 35));
+
+    parser[36] = &MethodResponseParser::parseHisInfo;
+    cmdMap.insert(pair<string, int>("HisInfo", 36));
+
+    parser[37] = &MethodResponseParser::parseControlFileBack;
+    cmdMap.insert(pair<string, int>("ControlFileBack", 37));
+
+    parser[38] = &MethodResponseParser::parseStartHisLoad;
+    cmdMap.insert(pair<string, int>("StartHisLoad", 38));
+
+    parser[39] = &MethodResponseParser::parseHisLoadInfo;
+    cmdMap.insert(pair<string, int>("HisLoadInfo", 39));
+
+    parser[40] = &MethodResponseParser::parseReqCamResState;
+    cmdMap.insert(pair<string, int>("ReqCamResState", 40));
+
+    parser[41] = &MethodResponseParser::parseGetUserCurState;
+    cmdMap.insert(pair<string, int>("GetUserCurState", 41));
+
+    parser[42] = &MethodResponseParser::parseSetUserCamManage;
+    cmdMap.insert(pair<string, int>("SetUserCamManage", 42));
+
+    parser[43] = &MethodResponseParser::parseAlarmResSubscribe;
+    cmdMap.insert(pair<string, int>("AlarmResSubscribe", 43));
+
+    //parser[44] = &MethodResponseParser::parseQueryAlarmRes_B;
+    //cmdMap.insert(pair<string, int>("QueryAlarmRes_B", 44));
+    parser[44] = &MethodResponseParser::parseQueryAlarmRes;
+    cmdMap.insert(pair<string, int>("QueryAlarmRes", 44));
+
+    parser[45] = &MethodResponseParser::parseReportAlarmInfo;
+    cmdMap.insert(pair<string, int>("ReportAlarmInfo", 45));
+
+    parser[46] = &MethodResponseParser::parseControlPTZ;
+    cmdMap.insert(pair<string, int>("ControlPTZ", 46));
+
+    parser[47] = &MethodResponseParser::parseResTransOrder;
+    cmdMap.insert(pair<string, int>("ResTransOrder", 47));
+
+    parser[48] = &MethodResponseParser::parseResChangeOrder;
+    cmdMap.insert(pair<string, int>("ResChangeOrder", 48));
+#endif
 }
 
 ULXR_API_IMPL(int) MethodResponseParser::parse(CppString buffer)
@@ -127,7 +222,7 @@ ULXR_API_IMPL(int) MethodResponseParser::parse(CppString buffer)
 		XMLString::release(&message);
 		return 0;
 	}
-	
+
 	MemBufInputSource *pMemBufInputSource = new MemBufInputSource((const XMLByte *)buffer.c_str(), buffer.length(), (const XMLCh *)0);
 	XercesDOMParser *pDomParser = new XercesDOMParser;
 	pDomParser->parse(*pMemBufInputSource);
@@ -183,9 +278,9 @@ ULXR_API_IMPL(int) MethodResponseParser::parse(CppString buffer)
 			//cout << resp.getMethodName() <<" " << cmdMap[resp.getMethodName()] << endl;
 			ret = (this->*parser[cmdMap[resp.getMethodName()]])(parametersNode);
 		}
-		
+
 	}
-	
+
 end:
 	delete pMemBufInputSource;
 	delete pDomParser;
@@ -205,7 +300,7 @@ Value MethodResponseParser::getSimpleValue(DOMNode *parametersNode, string value
 		node = childNodes->item(i);
 		paramName = XMLString::transcode(node->getNodeName());
 		if(paramName != valueName) continue;
-		
+
 		textNode = node->getFirstChild();
 		if(!textNode) return Value();
 		text = XMLString::transcode(textNode->getNodeValue());
@@ -274,15 +369,73 @@ Value MethodResponseParser::getArrayValue(DOMNode *parametersNode, string valueN
 	for(i = 0; i < childNodes->getLength(); i++) {
 		node = childNodes->item(i);
 		paramName = XMLString::transcode(node->getNodeName());
-		if(paramName == valueName) break;	
+		if(paramName == valueName) break;
 	}
 	if(i >= childNodes->getLength()) return Value();
-	
+
 	DOMNodeList *items = node->getChildNodes();
 	for(i = 0; i < items->getLength(); i++) {
 		group.addItem(getStructValue(node, itemName, itemFieldValueMap, i));
 	}
 	//cout << group.getXml() << endl;
+
+	return Value(valueName, group);
+}
+
+//B类:订阅告警信息的查询 Group;  valueName=group
+Value MethodResponseParser::getQueryAlarmRes(DOMNode *parametersNode, string valueName, string itemName, unordered_map<string,string> urlFieldValueMap){
+
+	DOMNodeList *childNodes = parametersNode->getChildNodes();
+	if(!childNodes)	return Value();
+
+	int i;
+	DOMNode *node_group;
+	CppString paramName;
+	//node_group: find valueName, check if equal group
+	for(i = 0; i < childNodes->getLength(); i++) {
+		node_group = childNodes->item(i);
+		paramName = XMLString::transcode(node_group->getNodeName());
+		if(paramName == valueName)	break;
+	}
+	if(i >= childNodes->getLength())
+		return Value();
+	//*url_list: valueName包括的成员列表(e.g. URL...)
+	DOMNodeList *url_list = node_group->getChildNodes();
+
+	Struct URL, url;
+	Array group;
+	DOMNode *item;
+	CppString item_name;
+	string text;
+	for(i = 0; i < url_list->getLength(); i++) {//解析每个 URL
+		item = url_list->item(i);
+ 
+        URL.clear();
+        url.clear();
+		url = getStructValue(item, "url", urlFieldValueMap);
+		URL.addMember("url", Value("url", url));
+
+		URL.addMember("alarmHisRecord", getSimpleValue(item, "alarmHisRecord", RpcStrType));
+		URL.addMember("state", getSimpleValue(item, "state", RpcStrType));
+		URL.addMember("time", getSimpleValue(item, "time", RpcStrType));
+		URL.addMember("id", getSimpleValue(item, "id", RpcStrType));
+		URL.addMember("type", getSimpleValue(item, "type", RpcStrType));
+		URL.addMember("id", getSimpleValue(item, "id", RpcStrType));
+/*
+        URL.clear();
+		URL.addMember("id", getSimpleValue(item, "id", RpcStrType));
+		URL.addMember("type", getSimpleValue(item, "type", RpcStrType));
+		URL.addMember("time", getSimpleValue(item, "time", RpcStrType));
+		URL.addMember("state", getSimpleValue(item, "state", RpcStrType));
+		URL.addMember("alarmHisRecord", getSimpleValue(item, "alarmHisRecord", RpcStrType));
+
+        url.clear();
+		url = getStructValue(item, "url", urlFieldValueMap);
+		URL.addMember("url", Value("url", url));
+*/
+        //group添加
+		group.addItem(Value("URL", URL));
+	}
 
 	return Value(valueName, group);
 }
@@ -363,7 +516,7 @@ int MethodResponseParser::parseGetAlarmResList(DOMNode *parametersNode) {
 	fieldValueMap.insert(pair<string,string>("id","string"));
 	fieldValueMap.insert(pair<string,string>("name","string"));
 	fieldValueMap.insert(pair<string,string>("description","string"));
-	
+
 	st.addMember("group",getArrayValue(parametersNode,"group","URL",fieldValueMap));
 
 	resp.setMethodName("GetAlarmResList");
@@ -389,14 +542,23 @@ int MethodResponseParser::parseQueryAlarmInfo(DOMNode *parametersNode) {
 
 	return 1;
 }
-
+//A类、B类共用——告警信息上报
 int MethodResponseParser::parseReportAlarmRes(DOMNode *parametersNode) {
+	resp.setMethodName("ReportAlarmRes");
 
-	resp.setResult(Value());
+	Struct st;
+
+    if(!parametersNode){	//A类
+		resp.setResult(Value());
+	}else{	//B类
+		st.addMember("muId",getSimpleValue(parametersNode,"muId",RpcStrType));
+		resp.setResult(st);
+	}
 
 	return 1;
 }
 
+//A类、B类共用——订阅告警的信息查询!!!!!
 int MethodResponseParser::parseQueryAlarmRes(DOMNode *parametersNode) {
 	if(!parametersNode) return 0;
 	Struct st;
@@ -405,15 +567,71 @@ int MethodResponseParser::parseQueryAlarmRes(DOMNode *parametersNode) {
 	fieldValueMap.insert(pair<string,string>("id","string"));
 	fieldValueMap.insert(pair<string,string>("type","string"));
 	fieldValueMap.insert(pair<string,string>("state","string"));
-	
-	st.addMember("group",getArrayValue(parametersNode,"group","URL",fieldValueMap));
+	//直接解析
+	CppString paramName;
+	DOMNode *node, *URL;
+	DOMNodeList *childNodes = parametersNode->getChildNodes();
+	if(!childNodes) return 0;
+	int i;
+	for(i = 0; i < childNodes->getLength(); i++) {
+		node = childNodes->item(i);
+		paramName = XMLString::transcode(node->getNodeName());
+		if(paramName == "group") break;
+	}
+	if(i >= childNodes->getLength()) return 0;
+	DOMNodeList *items = node->getChildNodes();
+	URL = items->item(0);
+    DOMNodeList *url_list = URL->getChildNodes();
 
+	if(url_list->getLength() == 3){	//A 类
+		st.addMember("group",getArrayValue(parametersNode,"group","URL",fieldValueMap));
+	}
+	else{	//B类
+        unordered_map<string,string> urlFieldValueMap;
+		urlFieldValueMap.insert(pair<string,string>("resId","string"));
+		urlFieldValueMap.insert(pair<string,string>("time","string"));
+
+		st.addMember("group", getQueryAlarmRes(parametersNode, "group", "URL", urlFieldValueMap));
+	}
 	resp.setMethodName("QueryAlarmRes");
 	resp.setResult(st);
 
 	return 1;
 }
+#if 0
+//B类接口 —— 订阅告警的信息查询!!!!!
+int MethodResponseParser::parseQueryAlarmRes_B(DOMNode *parametersNode) {
+	if(!parametersNode) return 0;
+	Struct st;
 
+    //直接解析
+	CppString paramName;
+	DOMNode *node, *URL;
+	DOMNodeList *childNodes = parametersNode->getChildNodes();
+	if(!childNodes) return 0;
+	int i;
+	for(i = 0; i < childNodes->getLength(); i++) {
+		node = childNodes->item(i);
+		paramName = XMLString::transcode(node->getNodeName());
+		if(paramName == "group") break;
+	}
+	if(i >= childNodes->getLength()) return 0;
+	DOMNodeList *items = node->getChildNodes();
+	URL = items->item(0);
+    DOMNodeList *url_list = URL->getChildNodes();
+
+	unordered_map<string,string> urlFieldValueMap;
+	urlFieldValueMap.insert(pair<string,string>("resId","string"));
+	urlFieldValueMap.insert(pair<string,string>("time","string"));
+
+	st.addMember("group", getQueryAlarmRes(parametersNode, "group", "URL", urlFieldValueMap));
+
+    resp.setMethodName("QueryAlarmRes_B");
+	resp.setResult(st);
+
+	return 1;
+}
+#endif
 int MethodResponseParser::parseAlarmHisQuery(DOMNode *parametersNode) {
 	if(!parametersNode) return 0;
 	Struct st;
@@ -430,7 +648,7 @@ int MethodResponseParser::parseAlarmHisQuery(DOMNode *parametersNode) {
 	fieldValueMap.insert(pair<string,string>("startTime","string"));
 	fieldValueMap.insert(pair<string,string>("endTime","string"));
 	fieldValueMap.insert(pair<string,string>("size","string"));
-	
+
 	st.addMember("group",getArrayValue(parametersNode,"group","URL",fieldValueMap));
 
 	resp.setMethodName("AlarmHisQuery");
@@ -578,13 +796,24 @@ int MethodResponseParser::parsePlayCtrl(DOMNode *parametersNode) {
 
 	return 1;
 }
-
+//A类、B类共用—— 摄像机状态上报
 int MethodResponseParser::parseReportCamResState(DOMNode *parametersNode) {
-	//if(!parametersNode) return 0;
-	
-	resp.setMethodName("ReportCamResState");
-	resp.setResult(Value());
-	cout << "parseReportCamResState" << endl;
+	Struct st;
+	Array group;
+
+	if(!parametersNode){	//A类
+		resp.setMethodName("ReportCamResState");
+		resp.setResult(Value());
+	}else{	//B类
+
+		resp.setMethodName("ReportCamResState");
+		unordered_map<string,string> fieldValueMap;
+		fieldValueMap.insert(pair<string,string>("resId","string"));
+		st.addMember("group",getArrayValue(parametersNode,"group", "URL", fieldValueMap));
+
+		resp.setResult(st);
+	}
+
 	return 1;
 }
 
@@ -604,6 +833,327 @@ int MethodResponseParser::parseGetCamResState(DOMNode *parametersNode) {
 	return 1;
 }
 
+/***************************************************************************
+ *  AreaNode ---> CoreNode
+ **************************************************************************/
+ //B.2.5　SIP注册  区域节点向核心节点注册
+int MethodResponseParser::parseMURegister(DOMNode *parametersNode) {
+	if(!parametersNode) return 0;
+	Struct st;
+
+	st.addMember("muKeepAlivePeriod",getSimpleValue(parametersNode,"muKeepAlivePeriod",RpcStrType));
+
+	resp.setMethodName("MURegister");
+	resp.setResult(st);
+
+	return 1;
+}
+//B.2.2　目录资源上报 区域节点向核心节点上报目录资源
+int MethodResponseParser::parseResReport(DOMNode *parametersNode) {
+
+	resp.setMethodName("ResReport");
+	resp.setResult(Value());
+
+	return 1;
+}
+//B.2.3　目录资源变更 ResChange
+int MethodResponseParser::parseResChange(DOMNode *parametersNode) {
+
+	resp.setMethodName("ResChange");
+	resp.setResult(Value());
+
+	return 1;
+}
+
+//B.2.6　心跳	  区域节点向核心节点发送心跳信息
+int MethodResponseParser::parseMUKeepAlive(DOMNode *parametersNode) {
+	if(!parametersNode) return 0;
+	Struct st;
+
+	st.addMember("muKeepAlivePeriod",getSimpleValue(parametersNode,"muKeepAlivePeriod",RpcStrType));
+	
+	resp.setMethodName("MUKeepAlive");
+	resp.setResult(st);
+
+	return 1;
+}
+//B.2.15　摄像机状态上报——与A类共用
+//B.2.17　用户资源上报 UserResReport
+int MethodResponseParser::parseUserResReport(DOMNode *parametersNode) {
+
+	resp.setMethodName("UserResReport");
+	resp.setResult(Value());
+
+	return 1;
+}
+//B.2.19　用户资源变更
+int MethodResponseParser::parseUserResChange(DOMNode *parametersNode) {
+	if(!parametersNode) return 0;
+	Struct st;
+
+	st.addMember("muId",getSimpleValue(parametersNode,"muId",RpcStrType));
+
+	resp.setMethodName("UserResChange");
+	resp.setResult(st);
+
+	return 1;
+}
+//B.2.21　告警资源上报
+int MethodResponseParser::parseAlarmResListReport(DOMNode *parametersNode) {
+	if(!parametersNode) return 0;
+	Struct st;
+
+	st.addMember("muId",getSimpleValue(parametersNode,"muId",RpcStrType));
+
+	resp.setMethodName("AlarmResListReport");
+	resp.setResult(st);
+
+	return 1;
+}
+//B.2.22　告警资源变更
+int MethodResponseParser::parseAlarmResListChange(DOMNode *parametersNode) {
+	if(!parametersNode) return 0;
+	Struct st;
+
+	st.addMember("muId",getSimpleValue(parametersNode,"muId",RpcStrType));
+
+	resp.setMethodName("AlarmResListChange");
+	resp.setResult(st);
+
+	return 1;
+}
+//B.2.24　告警信息上报——与A类共用
+
+/***************************************************************************
+ *  CoreNode ---> AreaNode
+ **************************************************************************/
+ //B.2.4　历史视频查询 核心节点向区域节点查询
+int MethodResponseParser::parseQueryHistoryFiles(DOMNode *parametersNode) {
+	if(!parametersNode) return 0;
+	Struct st;
+	
+	st.addMember("resId",getSimpleValue(parametersNode,"resId",RpcStrType));
+	st.addMember("cuId",getSimpleValue(parametersNode,"cuId",RpcStrType));
+	st.addMember("totalNumber",getSimpleValue(parametersNode,"totalNumber",RpcInteger));
+	st.addMember("currentNum",getSimpleValue(parametersNode,"currentNum",RpcInteger));
+	unordered_map<string,string> fieldValueMap;
+	fieldValueMap.insert(pair<string,string>("startTime","string"));
+	fieldValueMap.insert(pair<string,string>("endTime","string"));
+	fieldValueMap.insert(pair<string,string>("size","string"));
+	st.addMember("group",getArrayValue(parametersNode,"group","URL",fieldValueMap));
+
+	resp.setMethodName("QueryHistoryFiles");
+	resp.setResult(st);
+
+	return 1;
+} 
+//B.2.7　请求实时媒体流
+ int MethodResponseParser::parseStartMediaReq(DOMNode *parametersNode) {
+	if(!parametersNode) return 0;
+	Struct st;
+
+	st.addMember("sessionId",getSimpleValue(parametersNode,"sessionId",RpcStrType));
+	st.addMember("tcpIp",getSimpleValue(parametersNode,"tcpIp",RpcStrType));
+	st.addMember("tcpPort",getSimpleValue(parametersNode,"tcpPort",RpcStrType));
+
+	resp.setMethodName("StartMediaReq");
+	resp.setResult(st);
+
+	return 1;
+}
+//B.2.8　实时媒体流传输（TCP连接方式）  核心节点DDU向区域节点DDU 
+int MethodResponseParser::parseINFO(DOMNode *parametersNode) {
+	if(!parametersNode) return 0;
+	Struct st;
+	st.addMember("sessionId",getSimpleValue(parametersNode,"sessionId",RpcStrType));
+	resp.setMethodName("INFO");
+	resp.setResult(st);
+
+	return 1;
+}
+//B.2.9　停止视频传输
+int MethodResponseParser::parseStopMediaReq(DOMNode *parametersNode) {
+	if(!parametersNode) return 0;
+	Struct st;
+	st.addMember("sessionId",getSimpleValue(parametersNode,"sessionId",RpcStrType));
+	resp.setMethodName("StopMediaReq");
+	resp.setResult(st);
+
+	return 1;
+}
+//B.2.10　请求历史视频
+ int MethodResponseParser::parseStartPlayBack(DOMNode *parametersNode) {
+	if(!parametersNode) return 0;
+	Struct st;
+
+	st.addMember("sessionId",getSimpleValue(parametersNode,"sessionId",RpcStrType));
+	st.addMember("tcpIp",getSimpleValue(parametersNode,"tcpIp",RpcStrType));
+	st.addMember("tcpPort",getSimpleValue(parametersNode,"tcpPort",RpcStrType));
+
+	resp.setMethodName("StartPlayBack");
+	resp.setResult(st);
+
+	return 1;
+}
+//B.2.11　历史视频媒体流传输（TCP连接方式） 核心节点DDU向区域节点DDU
+int MethodResponseParser::parseHisInfo(DOMNode *parametersNode) {
+	if(!parametersNode) return 0;
+	Struct st;
+	st.addMember("sessionId",getSimpleValue(parametersNode,"sessionId",RpcStrType));
+	resp.setMethodName("HisInfo");
+	resp.setResult(st);
+
+	return 1;
+}
+//B.2.12　历史视频播放控制  
+int MethodResponseParser::parseControlFileBack(DOMNode *parametersNode) {
+	if(!parametersNode) return 0;
+	Struct st;
+	st.addMember("sessionId",getSimpleValue(parametersNode,"sessionId",RpcStrType));
+	resp.setMethodName("ControlFileBack");
+	resp.setResult(st);
+
+	return 1;
+}
+//B.2.13　请求历史视频下载
+ int MethodResponseParser::parseStartHisLoad(DOMNode *parametersNode) {
+	if(!parametersNode) return 0;
+	Struct st;
+
+	st.addMember("sessionId",getSimpleValue(parametersNode,"sessionId",RpcStrType));
+	st.addMember("tcpIp",getSimpleValue(parametersNode,"tcpIp",RpcStrType));
+	st.addMember("tcpPort",getSimpleValue(parametersNode,"tcpPort",RpcStrType));
+
+	resp.setMethodName("StartHisLoad");
+	resp.setResult(st);
+
+	return 1;
+}
+//B.2.14　历史视频下载传输（TCP连接方式） 核心节点DDU向区域节点DDU
+int MethodResponseParser::parseHisLoadInfo(DOMNode *parametersNode) {
+	if(!parametersNode) return 0;
+	Struct st;
+	st.addMember("sessionId",getSimpleValue(parametersNode,"sessionId",RpcStrType));
+	resp.setMethodName("HisLoadInfo");
+	resp.setResult(st);
+
+	return 1;
+}
+//B.2.16　摄像机状态查询
+int MethodResponseParser::parseReqCamResState(DOMNode *parametersNode) {
+	if(!parametersNode) return 0;
+	Struct st;
+	
+	unordered_map<string,string> fieldValueMap;
+	fieldValueMap.insert(pair<string,string>("resId","string"));
+	fieldValueMap.insert(pair<string,string>("state","string"));
+	st.addMember("group",getArrayValue(parametersNode,"group","URL",fieldValueMap));
+
+	resp.setMethodName("ReqCamResState");
+	resp.setResult(st);
+
+	return 1;
+} 
+//B.2.18　用户动态信息获取
+int MethodResponseParser::parseGetUserCurState(DOMNode *parametersNode) {
+	if(!parametersNode) return 0;
+	Struct st;
+	
+	st.addMember("muId",getSimpleValue(parametersNode,"muId",RpcStrType));
+	st.addMember("curUserId",getSimpleValue(parametersNode,"curUserId",RpcStrType));
+	st.addMember("userIp",getSimpleValue(parametersNode,"userIp",RpcStrType));
+	st.addMember("userState",getSimpleValue(parametersNode,"userState",RpcInteger));
+	unordered_map<string,string> fieldValueMap;
+	fieldValueMap.insert(pair<string,string>("id","string"));
+	fieldValueMap.insert(pair<string,string>("name","string"));
+	fieldValueMap.insert(pair<string,string>("size","string"));
+	st.addMember("group",getArrayValue(parametersNode,"group","URL",fieldValueMap));
+
+	resp.setMethodName("GetUserCurState");
+	resp.setResult(st);
+
+	return 1;
+}
+
+//B.2.20　用户摄像机资源屏蔽 
+int MethodResponseParser::parseSetUserCamManage(DOMNode *parametersNode) {
+	if(!parametersNode) return 0;
+	Struct st;
+	st.addMember("cuId",getSimpleValue(parametersNode,"cuId",RpcStrType));
+	resp.setMethodName("SetUserCamManage");
+	resp.setResult(st);
+
+	return 1;
+}
+//B.2.23　告警信息订阅
+int MethodResponseParser::parseAlarmResSubscribe(DOMNode *parametersNode) {
+	if(!parametersNode) return 0;
+	Struct st;
+	st.addMember("muId",getSimpleValue(parametersNode,"muId",RpcStrType));
+	resp.setMethodName("AlarmResSubscribe");
+	resp.setResult(st);
+
+	return 1;
+}
+//B.2.25　订阅告警的信息查询 ———— 与A类共用
+//B.2.26　告警信息查询
+int MethodResponseParser::parseReportAlarmInfo(DOMNode *parametersNode) {
+	if(!parametersNode) return 0;
+	Struct st;
+	
+	st.addMember("muId",getSimpleValue(parametersNode,"muId",RpcStrType));
+
+	unordered_map<string,string> fieldValueMap;
+	fieldValueMap.insert(pair<string,string>("id","string"));
+	fieldValueMap.insert(pair<string,string>("type","string"));
+	fieldValueMap.insert(pair<string,string>("startTime","string"));
+	fieldValueMap.insert(pair<string,string>("endTime","string"));
+	fieldValueMap.insert(pair<string,string>("message","string"));
+	
+	st.addMember("group",getArrayValue(parametersNode,"group","URL",fieldValueMap));
+
+	resp.setMethodName("ReportAlarmInfo");
+	resp.setResult(st);
+
+	return 1;
+}
+//B.2.27　云镜控制
+int MethodResponseParser::parseControlPTZ(DOMNode *parametersNode) {
+	if(!parametersNode) return 0;
+	Struct st;
+	
+	st.addMember("resId",getSimpleValue(parametersNode,"resId",RpcStrType));
+
+	resp.setMethodName("ControlPTZ");
+	resp.setResult(st);
+
+	return 1;
+}
+//B.2.28　跨节点资源下发
+int MethodResponseParser::parseResTransOrder(DOMNode *parametersNode) {
+	if(!parametersNode) return 0;
+	Struct st;
+	
+	st.addMember("muId",getSimpleValue(parametersNode,"muId",RpcStrType));
+
+	resp.setMethodName("ResTransOrder");
+	resp.setResult(st);
+
+	return 1;
+}
+//B.2.29　跨节点资源变更
+int MethodResponseParser::parseResChangeOrder(DOMNode *parametersNode) {
+	if(!parametersNode) return 0;
+	Struct st;
+	
+	st.addMember("muId",getSimpleValue(parametersNode,"muId",RpcStrType));
+
+	resp.setMethodName("ResChangeOrder");
+	resp.setResult(st);
+
+	return 1;
+}
+/******************************end******************************************/
 ULXR_API_IMPL(MethodResponse)
   MethodResponseParser::getMethodResponse()
 {
